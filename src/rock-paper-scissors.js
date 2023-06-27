@@ -5,29 +5,59 @@ const getComputerChoice = function() {
 }
 
 const playRound = function(playerSelection, computerSelection) {
-    if (playerSelection == computerSelection) return "Draw!";
     if (playerSelection == "rock") {
         if (computerSelection == "paper") {
-            return "You Lose! Paper beats Rock";
+            return [0, 1];
         } else if (computerSelection == "scissors") {
-            return "You Win! Rock beats Scissors"
+            return [1, 0];
         }
     } else if (playerSelection == "paper") {
         if (computerSelection == "rock") {
-            return "You Win! Paper beats Rock";
+            return [1, 0];
         } else if (computerSelection == "scissors") {
-            return "You Lose! Scissors beats Paper"
+            return [0, 1];
         }
     } else if (playerSelection == "scissors") {
         if (computerSelection == "rock") {
-            return "You Lose! Rock beats Scissors";
+            return [0, 1];
         } else if (computerSelection == "paper") {
-            return "You Win! Scissors beats Paper"
+            return [1, 0];
         }
     }
-    return "ERROR";
+    return [0, 0];
 }
 
-const playerSelection = "rock";
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+const game = function() {
+    validChoices = ["rock", "paper", "scissors"];
+    currentScore = [0, 0];
+    for (let i = 0; i < 5; i++) {
+
+        let playerSelection = undefined;
+        while (!validChoices.includes(playerSelection)) {
+            playerSelection = prompt("Rock, paper or scissors?").replace(/[^a-zA-Z0-9]+/g, '').toLowerCase();
+        }
+        computerSelection = getComputerChoice();
+
+        let round = playRound(playerSelection, computerSelection);
+        if (round[0] == 1) {
+            console.log(`Computer picks ${computerSelection}! You win this round!`);
+            currentScore[0]++;
+        } else if (round[1] == 1) {
+            console.log(`Computer picks ${computerSelection}! You lose this round :(`);
+            currentScore[1]++;
+        } else {
+            console.log(`Computer picks ${computerSelection}! Round draw!`);
+        }
+
+        console.log(`Round ${i + 1}/5, Human: ${currentScore[0]}, Computer: ${currentScore[1]}`);
+    }
+    if (currentScore[0] > currentScore[1]) {
+        console.log(`Congrats, you win!`);
+    } else if (currentScore[0] < currentScore[1]) {
+        console.log(`Boo, you lost!`);
+    } else {
+        console.log(`It was a draw!`);
+    }
+}
+
+game();
